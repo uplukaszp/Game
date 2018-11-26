@@ -1,7 +1,5 @@
 package pl.uplukaszp.enemy;
 
-import javafx.scene.paint.Color;
-import javafx.scene.shape.Rectangle;
 import pl.uplukaszp.EntityType;
 
 import com.almasb.fxgl.core.math.Vec2;
@@ -24,18 +22,18 @@ public class EnemyFactory implements EntityFactory {
 		PhysicsComponent physicsComponent = new PhysicsComponent();
 		physicsComponent.setBodyType(BodyType.KINEMATIC);
 		physicsComponent.setOnPhysicsInitialized(() -> {
-			physicsComponent.setBodyLinearVelocity(new Vec2(lastLayer * 2, 0));
+			physicsComponent.setBodyLinearVelocity(new Vec2(-lastLayer * 2, 0));
 		});
-		Vec2 startPosition = new Vec2(0, lastLayer * 40);
+		Vec2 startPosition = new Vec2(800, lastLayer * 40);
 		if (lastLayer < 5)
 			lastLayer++;
 		else
 			lastLayer = 1;
 
-		enemy = Entities.builder().type(EntityType.enemy).from(data)
-				.viewFromNodeWithBBox(new Rectangle(70, 30, Color.BROWN))
+		enemy = Entities.builder().type(EntityType.enemy).from(data).viewFromTextureWithBBox("plane.png")
 				.with(physicsComponent, new CollidableComponent(true)).build();
 		enemy.setPosition(startPosition);
+
 		return enemy;
 	}
 }

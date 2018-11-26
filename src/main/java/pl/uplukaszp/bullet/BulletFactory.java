@@ -23,7 +23,7 @@ public class BulletFactory implements EntityFactory {
 			physicsComponent.setBodyLinearVelocity(data.get("velocity"));
 		});
 		physicsComponent.setBodyType(BodyType.DYNAMIC);
-		bullet = Entities.builder().type(EntityType.bullet).from(data).viewFromNodeWithBBox(new Circle(10,Color.BLACK))
+		bullet = Entities.builder().type(EntityType.bullet).from(data).viewFromNodeWithBBox(new Circle(3,Color.BLACK))
 				.with(physicsComponent,new CollidableComponent(true)).build();
 		return bullet;
 	}

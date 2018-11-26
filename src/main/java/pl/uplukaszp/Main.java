@@ -29,13 +29,14 @@ public class Main extends GameApplication {
 		settings.setHeight(600);
 		settings.setMenuEnabled(true);
 		settings.setSceneFactory(new MenuFactory());
+		settings.setCSS("style.css");
 	}
 
 	@Override
 	protected void initUI() {
 		StringBinding score = getGameState().intProperty("score").asString();
 		StringBinding bullets = getGameState().intProperty("bullets").asString();
-		getGameScene().addUINode(new InGameUI(score, bullets,getWidth(),getHeight()));
+		getGameScene().addUINode(new InGameUI(score, bullets, getWidth(), getHeight()));
 	}
 
 	@Override
@@ -47,8 +48,8 @@ public class Main extends GameApplication {
 	@Override
 	protected void initGame() {
 		WorldInitializer.initialize(getGameWorld(), getMasterTimer());
-		player=getGameWorld().getEntitiesByType(EntityType.player).get(0);
-	
+		player = getGameWorld().getEntitiesByType(EntityType.player).get(0);
+
 	}
 
 	@Override

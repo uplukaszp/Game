@@ -19,16 +19,18 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.ScrollEvent;
 import pl.uplukaszp.menu.InGameUI;
 import pl.uplukaszp.menu.MenuFactory;
+import scores.ScoreUtil;
 
 public class Main extends GameApplication {
 	Entity player;
+	MenuFactory menuFactory = new MenuFactory();
 
 	@Override
 	protected void initSettings(GameSettings settings) {
 		settings.setWidth(800);
 		settings.setHeight(600);
 		settings.setMenuEnabled(true);
-		settings.setSceneFactory(new MenuFactory());
+		settings.setSceneFactory(menuFactory);
 		settings.setCSS("style.css");
 	}
 
@@ -81,11 +83,13 @@ public class Main extends GameApplication {
 				getGameState().setValue("bullets", getGameState().getInt("bullets") - 1);
 				if (getGameState().getInt("bullets") == 0) {
 					getDisplay().showMessageBox("Your score: " + getGameState().getInt("score"), () -> {
+						ScoreUtil.save(menuFactory.getProfileName(), getGameState().getInt("score").toString());
 
 					});
 				}
 			}
 		}, MouseButton.MIDDLE);
+
 	}
 
 	@Override

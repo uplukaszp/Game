@@ -3,18 +3,20 @@ package pl.uplukaszp.menu;
 import static com.almasb.fxgl.app.FXGL.getUIFactory;
 
 import java.util.Collection;
-import java.util.Map;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import pl.uplukaszp.ScoreUtil;
+import scores.Score;
+import scores.ScoreUtil;
 
 public class ScoreBoard extends VBox {
 	ScoreBoard() {
-		Map<String, String> scoreMap = ScoreUtil.load();
+		List<Score> scoreMap = ScoreUtil.load();
 
 		addTitleList();
 		addScores(scoreMap);
@@ -27,13 +29,15 @@ public class ScoreBoard extends VBox {
 		this.getChildren().add(0, titleList);
 	}
 
-	private void addScores(Map<String, String> scoreMap) {
+	private void addScores(List<Score> scoreList) {
 		HBox box = new HBox();
 		this.getChildren().add(box);
 		box.setPrefWidth(450);
-
-		box.getChildren().add(createList("Name", scoreMap.keySet()));
-		box.getChildren().add(createList("Points", scoreMap.values()));
+		box.setPrefHeight(410);
+		List<String> names=scoreList.stream().map(Score::getName).collect(Collectors.toList());
+		List<String> points=scoreList.stream().map(Score::getPoints).collect(Collectors.toList());
+		box.getChildren().add(createList("Name", names));
+		box.getChildren().add(createList("Points", points));
 	}
 
 	private ListView<String> createList(String columnName, Collection<String> rows) {

@@ -1,5 +1,9 @@
 package pl.uplukaszp.menu;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import com.almasb.fxgl.app.FXGL;
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.scene.FXGLMenu;
@@ -20,6 +24,7 @@ public class MainMenu extends FXGLMenu {
 	private HBox vbox = new HBox(50);
 
 	private Node menuBody;
+	private String profileName;
 
 	public MainMenu(GameApplication app, MenuType type) {
 		super(app, type);
@@ -63,6 +68,8 @@ public class MainMenu extends FXGLMenu {
 
 	@Override
 	protected Node createProfileView(String profileName) {
+		this.profileName=profileName.substring(profileName.indexOf(" ")+1);
+		FXGL.getApp().getGameState().setValue("name", profileName.substring(profileName.indexOf(" ")));
 		Text view = FXGL.getUIFactory().newText("");
 		return view;
 	}
@@ -153,5 +160,8 @@ public class MainMenu extends FXGLMenu {
 	protected final MenuContent createContentScore() {
 
 		return new MenuContent(new ScoreBoard());
+	}
+	public String getProfileName() {
+		return profileName;
 	}
 }

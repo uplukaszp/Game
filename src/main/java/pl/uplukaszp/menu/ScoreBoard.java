@@ -11,8 +11,8 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import scores.Score;
-import scores.ScoreUtil;
+import pl.uplukaszp.scores.Score;
+import pl.uplukaszp.scores.ScoreUtil;
 
 public class ScoreBoard extends VBox {
 	ScoreBoard() {

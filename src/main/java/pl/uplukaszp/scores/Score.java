@@ -1,4 +1,4 @@
-package scores;
+package pl.uplukaszp.scores;
 
 import java.io.Serializable;
 

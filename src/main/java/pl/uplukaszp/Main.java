@@ -20,7 +20,7 @@ import pl.uplukaszp.collisionHandlers.CollisionBetweenBulletAndEnemyHandler;
 import pl.uplukaszp.collisionHandlers.CollisionWithBoundsHandler;
 import pl.uplukaszp.menu.InGameUI;
 import pl.uplukaszp.menu.MenuFactory;
-import scores.ScoreUtil;
+import pl.uplukaszp.scores.ScoreUtil;
 
 public class Main extends GameApplication {
 	Entity player;

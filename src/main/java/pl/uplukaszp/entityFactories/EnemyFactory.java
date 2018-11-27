@@ -1,4 +1,4 @@
-package pl.uplukaszp.enemy;
+package pl.uplukaszp.entityFactories;
 
 import pl.uplukaszp.EntityType;
 
@@ -19,21 +19,29 @@ public class EnemyFactory implements EntityFactory {
 	@Spawns("Enemy")
 	public Entity newEnemy(SpawnData data) {
 		Entity enemy;
+
+		enemy = Entities.builder().type(EntityType.enemy).from(data).viewFromTextureWithBBox("plane.png")
+				.with(initPhysics(data), new CollidableComponent(true)).build();
+		enemy.setPosition(new Vec2(800, lastLayer * 40));
+		setNextLayer();
+		return enemy;
+	}
+
+	private PhysicsComponent initPhysics(SpawnData data) {
 		PhysicsComponent physicsComponent = new PhysicsComponent();
 		physicsComponent.setBodyType(BodyType.KINEMATIC);
 		physicsComponent.setOnPhysicsInitialized(() -> {
 			physicsComponent.setBodyLinearVelocity(new Vec2(-lastLayer * 2, 0));
 		});
-		Vec2 startPosition = new Vec2(800, lastLayer * 40);
+		return physicsComponent;
+	}
+
+	private void setNextLayer() {
 		if (lastLayer < 5)
 			lastLayer++;
 		else
 			lastLayer = 1;
 
-		enemy = Entities.builder().type(EntityType.enemy).from(data).viewFromTextureWithBBox("plane.png")
-				.with(physicsComponent, new CollidableComponent(true)).build();
-		enemy.setPosition(startPosition);
-
-		return enemy;
 	}
+
 }

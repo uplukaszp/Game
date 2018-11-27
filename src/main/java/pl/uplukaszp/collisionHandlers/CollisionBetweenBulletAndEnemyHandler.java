@@ -8,11 +8,13 @@ import pl.uplukaszp.EntityType;
 
 public class CollisionBetweenBulletAndEnemyHandler extends CollisionHandler {
 
-	GameState states;
+	private GameState states;
+
 	public CollisionBetweenBulletAndEnemyHandler(GameState states) {
 		super(EntityType.bullet, EntityType.enemy);
-		this.states=states;
+		this.states = states;
 	}
+
 	@Override
 	protected void onCollisionBegin(Entity enemy, Entity bullet) {
 		bullet.removeFromWorld();

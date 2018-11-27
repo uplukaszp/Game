@@ -9,8 +9,8 @@ import com.almasb.fxgl.time.Timer;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.util.Duration;
-import pl.uplukaszp.bullet.BulletFactory;
-import pl.uplukaszp.enemy.EnemyFactory;
+import pl.uplukaszp.entityFactories.BulletFactory;
+import pl.uplukaszp.entityFactories.EnemyFactory;
 
 public class WorldInitializer {
 

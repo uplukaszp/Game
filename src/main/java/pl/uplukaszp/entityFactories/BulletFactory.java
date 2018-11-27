@@ -1,4 +1,4 @@
-package pl.uplukaszp.bullet;
+package pl.uplukaszp.entityFactories;
 
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
@@ -18,13 +18,17 @@ public class BulletFactory implements EntityFactory {
 	@Spawns("Bullet")
 	public Entity newBullet(SpawnData data) {
 		Entity bullet;
+		bullet = Entities.builder().type(EntityType.bullet).from(data).viewFromNodeWithBBox(new Circle(3, Color.BLACK))
+				.with(initPhysics(data), new CollidableComponent(true)).build();
+		return bullet;
+	}
+
+	private PhysicsComponent initPhysics(SpawnData data) {
 		PhysicsComponent physicsComponent = new PhysicsComponent();
 		physicsComponent.setOnPhysicsInitialized(() -> {
 			physicsComponent.setBodyLinearVelocity(data.get("velocity"));
 		});
 		physicsComponent.setBodyType(BodyType.DYNAMIC);
-		bullet = Entities.builder().type(EntityType.bullet).from(data).viewFromNodeWithBBox(new Circle(3,Color.BLACK))
-				.with(physicsComponent,new CollidableComponent(true)).build();
-		return bullet;
+		return physicsComponent;
 	}
 }

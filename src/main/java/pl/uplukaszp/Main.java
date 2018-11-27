@@ -49,8 +49,9 @@ public class Main extends GameApplication {
 
 	@Override
 	protected void initGame() {
-		WorldInitializer.initialize(getGameWorld(), getMasterTimer());
+		WorldInitializer.initialize(getGameWorld(), getMasterTimer(),getWidth(),getHeight());
 		player = getGameWorld().getEntitiesByType(EntityType.player).get(0);
+
 
 	}
 
@@ -104,6 +105,22 @@ public class Main extends GameApplication {
 				getGameState().setValue("bullets", getGameState().getInt("bullets") + 1);
 
 			}
+		});
+		physics.addCollisionHandler(new CollisionHandler(EntityType.enemy,EntityType.bound) {
+		    @Override
+		    protected void onCollisionEnd(Entity enemy, Entity bound) {
+		    	enemy.removeFromWorld();
+		    	System.out.println("enemy removed");
+		    }
+
+		});
+		physics.addCollisionHandler(new CollisionHandler(EntityType.bullet,EntityType.bound) {
+		    @Override
+		    protected void onCollisionEnd(Entity enemy, Entity bound) {
+		    	enemy.removeFromWorld();
+		    	System.out.println("enemy removed");
+		    }
+
 		});
 	}
 

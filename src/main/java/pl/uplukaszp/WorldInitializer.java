@@ -3,6 +3,7 @@ package pl.uplukaszp;
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.GameWorld;
+import com.almasb.fxgl.entity.components.CollidableComponent;
 import com.almasb.fxgl.time.Timer;
 
 import javafx.scene.paint.Color;
@@ -13,8 +14,9 @@ import pl.uplukaszp.enemy.EnemyFactory;
 
 public class WorldInitializer {
 
-	public static void initialize(GameWorld gameWorld, Timer t) {
+	public static void initialize(GameWorld gameWorld, Timer t, int width, int height) {
 		addEntityFactories(gameWorld);
+		addWolrdBounds(gameWorld, width, height);
 		addPlayer(gameWorld);
 		addNonMoVableEntities(gameWorld);
 		addEnemySpawnTimer(t, gameWorld);
@@ -46,6 +48,15 @@ public class WorldInitializer {
 		t.runAtInterval(() -> {
 			gameWorld.spawn("Enemy");
 		}, Duration.seconds(1));
+
+	}
+
+	private static void addWolrdBounds(GameWorld gameWorld, int width, int height) {
+		Entity screenBounds = Entities.builder().at(0, 0)
+				.viewFromNodeWithBBox(new Rectangle(width, height, Color.WHITE)).build();
+		screenBounds.addComponent(new CollidableComponent(true));
+		screenBounds.setType(EntityType.bound);
+		gameWorld.addEntity(screenBounds);
 
 	}
 }

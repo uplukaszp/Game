@@ -9,7 +9,6 @@ import com.almasb.fxgl.entity.SpawnData;
 import com.almasb.fxgl.entity.components.RotationComponent;
 import com.almasb.fxgl.input.Input;
 import com.almasb.fxgl.input.UserAction;
-import com.almasb.fxgl.physics.CollisionHandler;
 import com.almasb.fxgl.physics.PhysicsWorld;
 import com.almasb.fxgl.settings.GameSettings;
 
@@ -17,6 +16,8 @@ import javafx.beans.binding.StringBinding;
 import javafx.geometry.Point2D;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.ScrollEvent;
+import pl.uplukaszp.collisionHandlers.CollisionBetweenBulletAndEnemyHandler;
+import pl.uplukaszp.collisionHandlers.CollisionWithBoundsHandler;
 import pl.uplukaszp.menu.InGameUI;
 import pl.uplukaszp.menu.MenuFactory;
 import scores.ScoreUtil;
@@ -49,43 +50,48 @@ public class Main extends GameApplication {
 
 	@Override
 	protected void initGame() {
-		WorldInitializer.initialize(getGameWorld(), getMasterTimer(),getWidth(),getHeight());
+		WorldInitializer.initialize(getGameWorld(), getMasterTimer(), getWidth(), getHeight());
 		player = getGameWorld().getEntitiesByType(EntityType.player).get(0);
-
 
 	}
 
 	@Override
 	protected void initInput() {
 		Input input = getInput();
-		input.addEventHandler(ScrollEvent.SCROLL, event -> {
-			RotationComponent rotation = player.getComponent(RotationComponent.class);
-			if (event.getDeltaY() > 0) {
-				if (rotation.getValue() < 90) {
-					rotation.rotateBy(5);
-				}
-			} else {
-				if (rotation.getValue() > 0) {
-					rotation.rotateBy(-5);
-				}
-			}
-		});
+		input.addEventHandler(ScrollEvent.SCROLL, this::rotatePlayer);
 		input.addAction(new UserAction("Shoot") {
 			@Override
 			protected void onActionBegin() {
+				spawnBullet();
+				decrementBulletCounter();
+				checkEndOfTheGame();
+			}
+
+			private void spawnBullet() {
+				Point2D center = new Point2D(player.getX(), player.getY() + 12);
+				SpawnData spawnData = new SpawnData(center);
+				spawnData.put("velocity", calculateVelocity());
+				getGameWorld().spawn("Bullet", spawnData);
+			}
+
+			private Vec2 calculateVelocity() {
 				Vec2 velocity = new Vec2();
 				velocity.y = (float) Math.cos(Math.toRadians(player.getRotation()));
 				velocity.x = (float) Math.sin(Math.toRadians(player.getRotation()));
 				velocity = velocity.mul(20);
-				Point2D center = new Point2D(player.getX(), player.getY() + 12);
-				SpawnData spawnData = new SpawnData(center);
-				spawnData.put("velocity", velocity);
-				getGameWorld().spawn("Bullet", spawnData);
+				return velocity;
+			}
+
+			private void decrementBulletCounter() {
 				getGameState().setValue("bullets", getGameState().getInt("bullets") - 1);
+
+			}
+
+			private void checkEndOfTheGame() {
 				if (getGameState().getInt("bullets") == 0) {
 					getDisplay().showMessageBox("Your score: " + getGameState().getInt("score"), () -> {
 						ScoreUtil.save(menuFactory.getProfileName(), getGameState().getInt("score").toString());
-
+						exit();
 					});
 				}
 			}
@@ -93,35 +99,26 @@ public class Main extends GameApplication {
 
 	}
 
+	private void rotatePlayer(ScrollEvent event) {
+		RotationComponent rotation = player.getComponent(RotationComponent.class);
+		if (event.getDeltaY() > 0) {
+			if (rotation.getValue() < 90) {
+				rotation.rotateBy(5);
+			}
+		} else {
+			if (rotation.getValue() > 0) {
+				rotation.rotateBy(-5);
+			}
+		}
+
+	}
+
 	@Override
 	protected void initPhysics() {
 		PhysicsWorld physics = getPhysicsWorld();
-		physics.addCollisionHandler(new CollisionHandler(EntityType.enemy, EntityType.bullet) {
-			@Override
-			protected void onCollisionBegin(Entity enemy, Entity bullet) {
-				bullet.removeFromWorld();
-				enemy.removeFromWorld();
-				getGameState().setValue("score", getGameState().getInt("score") + 1);
-				getGameState().setValue("bullets", getGameState().getInt("bullets") + 1);
-
-			}
-		});
-		physics.addCollisionHandler(new CollisionHandler(EntityType.enemy,EntityType.bound) {
-		    @Override
-		    protected void onCollisionEnd(Entity enemy, Entity bound) {
-		    	enemy.removeFromWorld();
-		    	System.out.println("enemy removed");
-		    }
-
-		});
-		physics.addCollisionHandler(new CollisionHandler(EntityType.bullet,EntityType.bound) {
-		    @Override
-		    protected void onCollisionEnd(Entity enemy, Entity bound) {
-		    	enemy.removeFromWorld();
-		    	System.out.println("enemy removed");
-		    }
-
-		});
+		physics.addCollisionHandler(new CollisionBetweenBulletAndEnemyHandler(getGameState()));
+		physics.addCollisionHandler(new CollisionWithBoundsHandler(EntityType.bullet));
+		physics.addCollisionHandler(new CollisionWithBoundsHandler(EntityType.enemy));
 	}
 
 	public static void main(String[] args) {

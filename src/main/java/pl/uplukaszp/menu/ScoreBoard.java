@@ -34,8 +34,8 @@ public class ScoreBoard extends VBox {
 		this.getChildren().add(box);
 		box.setPrefWidth(450);
 		box.setPrefHeight(410);
-		List<String> names=scoreList.stream().map(Score::getName).collect(Collectors.toList());
-		List<String> points=scoreList.stream().map(Score::getPoints).collect(Collectors.toList());
+		List<String> names = scoreList.stream().map(Score::getName).collect(Collectors.toList());
+		List<String> points = scoreList.stream().map(Score::getPoints).collect(Collectors.toList());
 		box.getChildren().add(createList("Name", names));
 		box.getChildren().add(createList("Points", points));
 	}

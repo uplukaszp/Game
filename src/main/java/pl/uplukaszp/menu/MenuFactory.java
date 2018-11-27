@@ -7,10 +7,10 @@ import com.almasb.fxgl.scene.menu.MenuType;
 
 public class MenuFactory extends SceneFactory {
 	MainMenu main;
-	
+
 	@Override
 	public FXGLMenu newMainMenu(GameApplication app) {
-		main=new MainMenu(app, MenuType.MAIN_MENU);
+		main = new MainMenu(app, MenuType.MAIN_MENU);
 		return main;
 	}
 
@@ -19,6 +19,7 @@ public class MenuFactory extends SceneFactory {
 		return new MainMenu(app, MenuType.GAME_MENU);
 
 	}
+
 	public String getProfileName() {
 		return main.getProfileName();
 	}

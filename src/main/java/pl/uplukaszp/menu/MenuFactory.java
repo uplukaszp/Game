@@ -17,9 +17,9 @@ public class MenuFactory extends SceneFactory {
 	@Override
 	public FXGLMenu newGameMenu(GameApplication app) {
 		return new MainMenu(app, MenuType.GAME_MENU);
-
 	}
 
+	/** @see pl.uplukaszp.menu.MainMenu#createProfileView(String) */
 	public String getProfileName() {
 		return main.getProfileName();
 	}

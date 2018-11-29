@@ -16,8 +16,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 
+/** Written based on @see com.almasb.fxgl.extra.scene.menu.GTAVMenu */
 public class MainMenu extends FXGLMenu {
-	private HBox vbox = new HBox(50);
+	private HBox menuContent = new HBox(50);
 
 	private Node menuBody;
 	private String profileName;
@@ -27,16 +28,16 @@ public class MainMenu extends FXGLMenu {
 
 		menuBody = type == MenuType.MAIN_MENU ? createMenuBodyMainMenu() : createMenuBodyGameMenu();
 
-		vbox.getChildren().addAll(new Pane(), new Pane());
-		vbox.setTranslateX(50);
-		vbox.setTranslateY(50);
+		menuContent.getChildren().addAll(new Pane(), new Pane());
+		menuContent.setTranslateX(50);
+		menuContent.setTranslateY(50);
 
-		menuRoot.getChildren().add(vbox);
+		menuRoot.getChildren().add(menuContent);
 		contentRoot.getChildren().add(EMPTY);
 
-		vbox.getChildren().set(0, menuBody);
+		menuContent.getChildren().set(0, menuBody);
 		if (type == MenuType.MAIN_MENU)
-			vbox.getChildren().set(1, createContentScore());
+			menuContent.getChildren().set(1, createContentScore());
 		activeProperty().addListener((observable, wasActive, isActive) -> {
 			if (!isActive) {
 				switchMenuTo(menuBody);
@@ -50,29 +51,32 @@ public class MainMenu extends FXGLMenu {
 		return new Rectangle(app.getWidth(), app.getHeight(), Color.WHITE);
 	}
 
+	/** Title in menu is hidden */
 	@Override
 	protected Node createTitleView(String title) {
 		Text titleView = FXGL.getUIFactory().newText("");
 		return titleView;
 	}
 
+	/** Version in menu is hidden */
 	@Override
 	protected Node createVersionView(String version) {
 		Text view = FXGL.getUIFactory().newText("");
 		return view;
 	}
 
+	/** Profile name in menu is hidden */
 	@Override
 	protected Node createProfileView(String profileName) {
+		// This is the only place, when the profile name is available
 		this.profileName = profileName.substring(profileName.indexOf(" ") + 1);
-		FXGL.getApp().getGameState().setValue("name", profileName.substring(profileName.indexOf(" ")));
 		Text view = FXGL.getUIFactory().newText("");
 		return view;
 	}
 
 	@Override
 	protected void switchMenuTo(Node menuBox) {
-		vbox.getChildren().set(0, menuBox);
+		menuContent.getChildren().set(0, menuBox);
 	}
 
 	@Override
@@ -153,11 +157,11 @@ public class MainMenu extends FXGLMenu {
 		return btn;
 	}
 
-	protected final MenuContent createContentScore() {
-
+	private final MenuContent createContentScore() {
 		return new MenuContent(new ScoreBoard());
 	}
 
+	/** @see pl.uplukaszp.menu.MainMenu#createProfileView(String) */
 	public String getProfileName() {
 		return profileName;
 	}

@@ -1,5 +1,6 @@
 package pl.uplukaszp;
 
+import com.almasb.fxgl.app.FXGL;
 import com.almasb.fxgl.entity.Entities;
 import com.almasb.fxgl.entity.Entity;
 import com.almasb.fxgl.entity.GameWorld;
@@ -13,8 +14,16 @@ import pl.uplukaszp.entityFactories.BulletFactory;
 import pl.uplukaszp.entityFactories.EnemyFactory;
 
 public class WorldInitializer {
-
-	public static void initialize(GameWorld gameWorld, Timer t, int width, int height) {
+	/*
+	 * Adds to the world of the game all moving and non-moving entities. Adds a
+	 * timer that schedules the appearance of airplanes
+	 */
+	public static void initialize() {
+		GameWorld gameWorld = FXGL.getGameWorld();
+		Timer t = FXGL.getMasterTimer();
+		int width = FXGL.getAppWidth();
+		int height = FXGL.getAppHeight();
+	
 		addEntityFactories(gameWorld);
 		addWolrdBounds(gameWorld, width, height);
 		addPlayer(gameWorld);

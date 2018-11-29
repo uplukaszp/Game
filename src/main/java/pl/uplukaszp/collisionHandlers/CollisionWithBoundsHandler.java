@@ -5,6 +5,10 @@ import com.almasb.fxgl.physics.CollisionHandler;
 
 import pl.uplukaszp.EntityType;
 
+/**
+ * Detection of this collision means that the object leaves the game screen.
+ * This entity should be removed.
+ */
 public class CollisionWithBoundsHandler extends CollisionHandler {
 
 	public CollisionWithBoundsHandler(EntityType entityType) {

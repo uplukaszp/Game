@@ -21,11 +21,21 @@ import javafx.scene.effect.Lighting;
 import javafx.scene.paint.Color;
 
 public class EnemyFactory implements EntityFactory {
-	
-	static final int LAYERS = 4;
-	static final String TEXTURE_NAME = "plane.png";
 	static final int SCREEN_WIDTH = FXGL.getAppWidth();
-	static final int LAYER_WIDTH = 40;
+
+	static final String TEXTURE_NAME = "plane.png";
+
+	/**
+	 * Enemies are spawned at fixed height, determined from the equation: number of
+	 * layer*Layer height. Enemies on each layer have their own speed, to avoid
+	 * collision between enemies.
+	 */
+	static final int LAYERS = 4;
+	static final int LAYER_HEIGHT = 40;
+
+	/**
+	 * Type of enemy(plane) determines its color and point bonus during a collision
+	 */
 	static final Color COLOR_FRIENDLY_PLANE = Color.BLACK;
 	static final Color COLOR_ENEMY_PLANE = Color.GRAY;
 	static final Color COLOR_ENEMY_PLANE_WITH_BONUS = Color.DARKGRAY;
@@ -35,6 +45,7 @@ public class EnemyFactory implements EntityFactory {
 	int lastLayer = 1;
 	Random random = new Random();
 
+	/** Creates new enemy with random type */
 	@Spawns("Enemy")
 	public Entity newEnemy(SpawnData data) {
 		Entity enemy = buildEnemy(data);
@@ -50,7 +61,7 @@ public class EnemyFactory implements EntityFactory {
 
 		enemy = Entities.builder().type(EntityType.plane).from(data).viewFromTextureWithBBox(TEXTURE_NAME)
 				.with(physics, collidable).build();
-		enemy.setPosition(new Vec2(SCREEN_WIDTH, lastLayer * LAYER_WIDTH));
+		enemy.setPosition(new Vec2(SCREEN_WIDTH, lastLayer * LAYER_HEIGHT));
 
 		enemy.getView().setEffect(getColorEffect(c));
 
@@ -67,13 +78,17 @@ public class EnemyFactory implements EntityFactory {
 		return physicsComponent;
 	}
 
+	/**
+	 * Color and type are drawn based on CHANCE_TO_PICK_FRIEND and
+	 * CHANCE_TO_PICK_ENEMY_WITH_BONUS value
+	 */
 	private Color drawColor() {
 		int randomNumber = random.nextInt(100);
-		System.out.println(randomNumber);
 		Color c = COLOR_ENEMY_PLANE;
 		if (randomNumber <= CHANCE_TO_PICK_FRIEND)
 			c = COLOR_FRIENDLY_PLANE;
-		if (randomNumber > CHANCE_TO_PICK_FRIEND && randomNumber < CHANCE_TO_PICK_ENEMY_WITH_BONUS + CHANCE_TO_PICK_FRIEND)
+		if (randomNumber > CHANCE_TO_PICK_FRIEND
+				&& randomNumber < CHANCE_TO_PICK_ENEMY_WITH_BONUS + CHANCE_TO_PICK_FRIEND)
 			c = COLOR_ENEMY_PLANE_WITH_BONUS;
 		return c;
 	}
@@ -99,6 +114,7 @@ public class EnemyFactory implements EntityFactory {
 			return 0;
 	}
 
+	/** Ensures, that next enemy is spawned at a different height */
 	private void setNextLayer() {
 		if (lastLayer < LAYERS)
 			lastLayer++;

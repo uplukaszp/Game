@@ -30,7 +30,7 @@ public class Main extends GameApplication {
 	protected void initSettings(GameSettings settings) {
 		settings.setWidth(800);
 		settings.setHeight(600);
-		settings.setMenuEnabled(true);
+		//settings.setMenuEnabled(true);
 		settings.setSceneFactory(menuFactory);
 		settings.setCSS("style.css");
 	}
@@ -118,7 +118,7 @@ public class Main extends GameApplication {
 		PhysicsWorld physics = getPhysicsWorld();
 		physics.addCollisionHandler(new CollisionBetweenBulletAndEnemyHandler(getGameState()));
 		physics.addCollisionHandler(new CollisionWithBoundsHandler(EntityType.bullet));
-		physics.addCollisionHandler(new CollisionWithBoundsHandler(EntityType.enemy));
+		physics.addCollisionHandler(new CollisionWithBoundsHandler(EntityType.plane));
 	}
 
 	public static void main(String[] args) {

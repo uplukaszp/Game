@@ -11,17 +11,21 @@ public class CollisionBetweenBulletAndEnemyHandler extends CollisionHandler {
 	private GameState states;
 
 	public CollisionBetweenBulletAndEnemyHandler(GameState states) {
-		super(EntityType.bullet, EntityType.enemy);
+		super(EntityType.bullet, EntityType.plane);
 		this.states = states;
 	}
 
 	@Override
-	protected void onCollisionBegin(Entity enemy, Entity bullet) {
+	protected void onCollisionBegin(Entity bullet, Entity enemy) {
 		bullet.removeFromWorld();
 		enemy.removeFromWorld();
-		states.setValue("score", states.getInt("score") + 1);
-		states.setValue("bullets", states.getInt("bullets") + 1);
+		int bonus = enemy.getProperties().getValue("bonus");
+		updateStats(bonus);
+	}
 
+	private void updateStats(int bonus) {
+		states.setValue("score", states.getInt("score") + bonus);
+		states.setValue("bullets", states.getInt("bullets") + bonus);
 	}
 
 }

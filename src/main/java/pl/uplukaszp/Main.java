@@ -31,6 +31,8 @@ public class Main extends GameApplication {
 		settings.setMenuEnabled(true);
 		settings.setSceneFactory(menuFactory);
 		settings.setCSS("style.css");
+		settings.setTitle("SkyDefender");
+		settings.setVersion("");
 	}
 
 	@Override

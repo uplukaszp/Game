@@ -74,7 +74,7 @@ public class ShootAction extends UserAction {
 	}
 
 	private boolean gameHasEnd() {
-		return gameState.getInt("bullets") == 0;
+		return gameState.getInt("bullets") <= 0;
 	}
 
 }

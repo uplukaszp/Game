@@ -21,7 +21,7 @@ public class MainMenu extends FXGLMenu {
 	private HBox menuContent = new HBox(50);
 
 	private Node menuBody;
-	private String profileName;
+	private StringBuilder profileName=new StringBuilder();
 
 	public MainMenu(GameApplication app, MenuType type) {
 		super(app, type);
@@ -69,7 +69,7 @@ public class MainMenu extends FXGLMenu {
 	@Override
 	protected Node createProfileView(String profileName) {
 		// This is the only place, when the profile name is available
-		this.profileName = profileName.substring(profileName.indexOf(" ") + 1);
+		this.profileName.append(profileName.substring(profileName.indexOf(" ") + 1));
 		Text view = FXGL.getUIFactory().newText("");
 		return view;
 	}
@@ -162,7 +162,7 @@ public class MainMenu extends FXGLMenu {
 	}
 
 	/** @see pl.uplukaszp.menu.MainMenu#createProfileView(String) */
-	public String getProfileName() {
+	public StringBuilder getProfileName() {
 		return profileName;
 	}
 }

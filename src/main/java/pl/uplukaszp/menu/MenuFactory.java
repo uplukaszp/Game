@@ -20,7 +20,7 @@ public class MenuFactory extends SceneFactory {
 	}
 
 	/** @see pl.uplukaszp.menu.MainMenu#createProfileView(String) */
-	public String getProfileName() {
+	public StringBuilder getProfileName() {
 		return main.getProfileName();
 	}
 }

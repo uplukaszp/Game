@@ -13,13 +13,13 @@ import javafx.geometry.Point2D;
 import pl.uplukaszp.scores.ScoreUtil;
 
 public class ShootAction extends UserAction {
-	String profileName = "";
+	StringBuilder profileName;
 	GameWorld gameWorld = FXGL.getGameWorld();
 	GameState gameState = FXGL.getGameState();
 	Display display = FXGL.getDisplay();
 	Entity player = null;
 
-	public ShootAction(String profileName) {
+	public ShootAction(StringBuilder profileName) {
 		super("Shoot");
 		this.profileName = profileName;
 	}
@@ -63,7 +63,7 @@ public class ShootAction extends UserAction {
 	private void checkEndOfTheGame() {
 		if (gameHasEnd()) {
 			display.showMessageBox("Your score: " + gameState.getInt("score"), () -> {
-				ScoreUtil.save(profileName, gameState.getInt("score").toString());
+				ScoreUtil.save(profileName.toString(), gameState.getInt("score").toString());
 				/**
 				 * The engine doesn't allow to programmatically return to main menu, so after
 				 * save the Score, the game must be closed.

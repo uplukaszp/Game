@@ -32,6 +32,7 @@ public class EnemyFactory implements EntityFactory {
 	 */
 	static final int LAYERS = 4;
 	static final int LAYER_HEIGHT = 40;
+	static final int SPEED_MULTIPLIER = 2;
 
 	/**
 	 * Type of enemy(plane) determines its color and point bonus during a collision
@@ -39,7 +40,7 @@ public class EnemyFactory implements EntityFactory {
 	static final Color COLOR_FRIENDLY_PLANE = Color.BLACK;
 	static final Color COLOR_ENEMY_PLANE = Color.GRAY;
 	static final Color COLOR_ENEMY_PLANE_WITH_BONUS = Color.DARKGRAY;
-	static final int CHANCE_TO_PICK_FRIEND = 15;
+	static final int CHANCE_TO_PICK_FRIEND = 25;
 	static final int CHANCE_TO_PICK_ENEMY_WITH_BONUS = 10;
 
 	int lastLayer = 1;
@@ -73,7 +74,7 @@ public class EnemyFactory implements EntityFactory {
 		PhysicsComponent physicsComponent = new PhysicsComponent();
 		physicsComponent.setBodyType(BodyType.KINEMATIC);
 		physicsComponent.setOnPhysicsInitialized(() -> {
-			physicsComponent.setBodyLinearVelocity(new Vec2(-lastLayer * 2, 0));
+			physicsComponent.setBodyLinearVelocity(new Vec2(-lastLayer * SPEED_MULTIPLIER, 0));
 		});
 		return physicsComponent;
 	}
@@ -84,13 +85,13 @@ public class EnemyFactory implements EntityFactory {
 	 */
 	private Color drawColor() {
 		int randomNumber = random.nextInt(100);
-		Color c = COLOR_ENEMY_PLANE;
-		if (randomNumber <= CHANCE_TO_PICK_FRIEND)
-			c = COLOR_FRIENDLY_PLANE;
-		if (randomNumber > CHANCE_TO_PICK_FRIEND
+		if (randomNumber <= CHANCE_TO_PICK_ENEMY_WITH_BONUS)
+			return COLOR_ENEMY_PLANE_WITH_BONUS;
+		else if (randomNumber > CHANCE_TO_PICK_ENEMY_WITH_BONUS
 				&& randomNumber < CHANCE_TO_PICK_ENEMY_WITH_BONUS + CHANCE_TO_PICK_FRIEND)
-			c = COLOR_ENEMY_PLANE_WITH_BONUS;
-		return c;
+			return COLOR_FRIENDLY_PLANE;
+		else
+			return COLOR_ENEMY_PLANE;
 	}
 
 	private Effect getColorEffect(Color c) {
@@ -104,11 +105,11 @@ public class EnemyFactory implements EntityFactory {
 	}
 
 	private int calculateBonus(Color c) {
-		if (c.equals(Color.BLACK))
+		if (c.equals(COLOR_FRIENDLY_PLANE))
 			return -1;
-		else if (c.equals(Color.DARKGRAY))
+		else if (c.equals(COLOR_ENEMY_PLANE))
 			return 1;
-		else if (c.equals(Color.GREY))
+		else if (c.equals(COLOR_ENEMY_PLANE_WITH_BONUS))
 			return 2;
 		else
 			return 0;
